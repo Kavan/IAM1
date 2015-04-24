@@ -13,17 +13,19 @@ import java.net.URL;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.testng.Assert;
 
 public class IAODrivers {
 	
 	public static WebDriver driver;
-	File fIEPath,fCHPath;
-	 private  String OS = null;
+	private DesiredCapabilities objCapability;
+	private  String OS = null;
 	
 	@SuppressWarnings("static-access")
 	DesiredCapabilities capabilities = new DesiredCapabilities();
@@ -50,10 +52,15 @@ public class IAODrivers {
 	//This method will invoke InternetExplorer driver
 	public WebDriver setInternetExplorerBrowser() 
 	{
-		if (isthisWindowsOS()) {
-			fIEPath = new File("config/applications/IEDriverServer.exe"); 
-			System.setProperty("webdriver.ie.driver", fIEPath.getPath());
-				driver = new FirefoxDriver();
+		if (isthisWindowsOS()) 
+		{
+			objCapability = DesiredCapabilities.internetExplorer();
+			 try {
+				driver = new RemoteWebDriver(new URL("http://localhost:5555"), objCapability);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 			return driver;
 	}
@@ -69,9 +76,18 @@ public class IAODrivers {
 	public WebDriver setChromeBrowser() 
 	{
 		if (isthisWindowsOS()) {
-			fCHPath = new File("config/applications/chromedriver.exe"); 
-			System.setProperty("webdriver.chrome.driver", fCHPath.getPath());
-			driver = new ChromeDriver();
+			
+			 objCapability = DesiredCapabilities.chrome();
+			 objCapability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+			 ChromeOptions options = new ChromeOptions();
+			 options.addArguments("test-type");
+			 objCapability.setCapability(ChromeOptions.CAPABILITY, options);
+			 try {
+				driver = new RemoteWebDriver(new URL("http://localhost:9515"), objCapability);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} 
 		
 		return driver;
@@ -80,7 +96,6 @@ public class IAODrivers {
 	//This method will invoke Safari driver
 	public WebDriver setSafariBrowser() 
 	{
-		
 			driver = new SafariDriver();
 			return driver;
 	}
