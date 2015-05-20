@@ -65,7 +65,7 @@ public class IAOReports
 	{
 		ATUReports.setWebDriver(driver);
 		ATUReports.setAuthorInfo("Venkata Uday", Utils.getCurrentTime(),"1.0");
-		ATUReports.indexPageDescription = "<h3>E.On</h3><br><b>IAM ONE Automation Report</b>";
+		ATUReports.indexPageDescription = "<b>IAM ONE Automation Report</b>";
 	}
 	public ATUTestRecorder setVideoRecorder()
 	{
